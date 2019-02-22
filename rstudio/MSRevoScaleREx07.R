@@ -1,98 +1,74 @@
 rxPrivacyControl(FALSE)
 options(encoding = "UTF-8"); par(ask=F)
-rm(list = ls(all = TRUE))
+# Load the MicrosoftML library
+library(MicrosoftML)
 
-library(rpart) # Popular decision tree algorithm
-#library(rattle) # Fancy tree plot
-library(rpart.plot) # Enhanced tree plots
-library(RColorBrewer) # Color selection for fancy tree plot
-library(party) # Alternative decision tree algorithm
-library(partykit) # Convert rpart object to BinaryTree
-library(caret) # Just a data source for this script
+#2. Load the training dataset
 
+#Note that we have some extra code here to get the datasets directly from UCI (online) or local (offline).
 
-Revo.version
-Revo.home()
-rxGetComputeContext()
-rxSetComputeContext()
-
-#RevoScaleR::Rx
-
-# titanic dataset csv file
-titanic_csv = "titanic.csv"
-
-# dataset column names and types
-col_classes = c(
-  "PassengerId" = "integer",
-  "Survived" = "factor",
-  "Pclass" = "factor",
-  "Sex" = "factor",
-  "Age" = "numeric",
-  "SibSp" = "integer",
-  "Parch" = "integer",
-  "Ticket" = "character",
-  "Fare" = "numeric",
-  "Cabin" = "character",
-  "Embarked" = "factor"
-)
-
-# load (in-memory) dataframe
-titanic_data = read.csv(titanic_csv, colClasses = col_classes)
-head(titanic_data)
-
-# import and reference an external data frame (xdf)
-titanic_xdf = "titanic.xdf"
-rxImport(titanic_csv, titanic_xdf, colClasses = col_classes, overwrite = TRUE)
-titanic_xdata <- RxXdfData(titanic_xdf)
-
-# get information about the xdf
-rxGetInfo(titanic_xdata, getVarInfo = TRUE, numRows = 2)
-rxSummary(~ Age, titanic_xdata)
-
-# data preparation function
-prepare_data <- function(data) {
+unZip <- TRUE # Set to FALSE if reading directly from the trainFile and testFile
+trainFile = "sentiment labelled sentences/imdb_labelled.txt"
+testFile = "sentiment labelled sentences/yelp_labelled.txt"
+getData <- function(targetFile, zipfile){
+  read.delim(unz(zipfile, targetFile), 
+             header=FALSE, 
+             col.names=c("Text", "Rating"),
+             quote="",
+             stringsAsFactors=FALSE)
+}
+dataTrain <- NULL
   
-  # fix factor levels in Survived
-  data$Survived = factor(data$Survived, levels = 0:1, labels = c('No', 'Yes'))
+if (unZip) {
+  # So get a local temp location
+  temp <- tempfile()
   
-  # create a new variable FareToAgeRatio
-  data$FareToAgeRatio = data$Fare / data$Age
+  # Download the zip file to the temp location
+  zipfile <- download.file("http://archive.ics.uci.edu/ml/machine-learning-databases/00331/sentiment%20labelled%20sentences.zip",temp)
   
-  # handling missing values in Age 
-  age_mean = mean(data$Age, na.rm = TRUE)
-  data$Age[is.na(data$Age)] <- age_mean
-  return(data)
+  # We'll use the imdb_labelled.txt file for training
+  dataTrain <- getData(trainFile, temp)
+  dataTest <- getData(testFile, temp)
+} else {
+  dataTrain <- getData(trainFile)
+  dataTest <- getData(testFile)
 }
 
-# execute a (scalable/parallelizable) data step
-rxDataStep(titanic_xdata, titanic_xdata,
-           transformFunc = prepare_data,
-           overwrite = TRUE)
+#3. Setup the featurizeText() transform
 
-# show xdf information after data processing
-rxGetInfo(titanic_xdata, getVarInfo = TRUE, numRows = 0)
-rxSummary( ~ Age, titanic_xdata)
+#For starters, we'll use the featurizeText() transform with defaults. Feel free to play around with the different transform parameters to see if you can get a better AUC result. To find out the parameters of the transform, use ?featurizeText in your R interpreter window.
 
-# summarize Survived variable with respect to the Gender variable, then plot it
-rxsm = rxSummary( ~ Survived:Sex, titanic_xdata)
-genVsSurv <- tidyr::spread(rxsm$categorical[[1]], key = 'Sex', value = 'Counts')
-row.names(genVsSurv) <- genVsSurv[, 1]
-genVsSurv <- as.matrix(genVsSurv[, -1])
-levelplot(prop.table(genVsSurv, 2), xlab = "Survived", ylab = "Gender",
-          main = "Survived vs. Gender")
-Sys.sleep(2)
-# learn a decision tree using a scalable DT learning algorithm 
-rx_decision_tree <- rxDTree(Survived ~ Age + Sex + Fare + Pclass, 
-                            data = titanic_xdata, pruneCp = "auto", 
-                            reportProgress = 0)
+#The vars parameter tells the transform which column(s) to featurzie on. In this case, it's the Text column.
 
-# plot the decision tree
-prp(rxAddInheritance(rx_decision_tree),roundint=FALSE)
-#library(rattle)
-#rattle::fancyRpartPlot(rxAddInheritance(rx_decision_tree))
+# Now let's setup the text featurizer transform
+# We'll use all defaults for now
+textTransform = list(featurizeText(vars = c(Features = "Text")))
 
-# perform predictions
-test_data = data.frame(Age = c(30,20), Sex = c("male","female"))
-predictions = rxPredict(rx_decision_tree, test_data)
-head(predictions)
+#4. Train a model using rxFastLinear
 
+#Here we indicate to the rxFastLinear algorithm to use the text featurizer via the textTransform variable that was setup in Step 3. We'll use all default parameters for the rxFastLinear algorithm.
+
+# Train a linear model on featurized text
+# Using all defaults for rxFastLinear algo
+model <- rxFastLinear(
+  Rating ~ Features, 
+  data = dataTrain,
+  mlTransforms = textTransform, verbose=4
+)
+
+#5. Test the model using the test dataset
+
+#Now let's test the model. We'll use yelp_labelled.txt as the test dataset.
+
+# Get the predictions based on the test dataset
+score <- rxPredict(model, data = dataTest, extraVarsToWrite = c("Rating"))
+
+# Let's look at the prediction
+head(score)
+
+#6. Evaluate the performance of the model
+
+#Finally, let's see how good the model was based on the test dataset.
+
+# How good was the prediction?
+rxRocCurve(actualVarName = "Rating", predVarNames = "Probability.1", data = score)

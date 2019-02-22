@@ -3,7 +3,7 @@ options(encoding = "UTF-8"); par(ask=F)
 rm(list = ls(all = TRUE))
 
 library(rpart) # Popular decision tree algorithm
-library(rattle) # Fancy tree plot
+#library(rattle) # Fancy tree plot
 library(rpart.plot) # Enhanced tree plots
 library(RColorBrewer) # Color selection for fancy tree plot
 library(party) # Alternative decision tree algorithm
@@ -19,7 +19,7 @@ rxSetComputeContext()
 #RevoScaleR::Rx
 
 # titanic dataset csv file
-titanic_csv = "titanic.csv"
+titanic_csv = "data/titanic.csv"
 
 # dataset column names and types
 col_classes = c(
@@ -41,7 +41,7 @@ titanic_data = read.csv(titanic_csv, colClasses = col_classes)
 head(titanic_data)
 
 # import and reference an external data frame (xdf)
-titanic_xdf = "titanic.xdf"
+titanic_xdf = "data/titanic.xdf"
 rxImport(titanic_csv, titanic_xdf, colClasses = col_classes, overwrite = TRUE)
 titanic_xdata <- RxXdfData(titanic_xdf)
 
@@ -96,3 +96,4 @@ test_data = data.frame(Age = c(30,20), Sex = c("male","female"))
 predictions = rxPredict(rx_decision_tree, test_data)
 head(predictions)
 
+file.remove("data/titanic.xdf")

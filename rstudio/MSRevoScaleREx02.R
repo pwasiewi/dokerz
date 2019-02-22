@@ -39,7 +39,7 @@ if (!suppressPackageStartupMessages(require("MicrosoftML",
 # 2. Import data.
 #-----------------------------------------------------------------------
 # The directory containing data files.
-dataDir <- file.path("Data")
+dataDir <- file.path("data")
 # Verify that the data files exist.
 if (!all(file.exists(file.path(dataDir,
                                c("Retail Churn Users.csv",

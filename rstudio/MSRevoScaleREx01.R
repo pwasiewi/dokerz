@@ -217,6 +217,9 @@ chunkOut
 rxDataStep(iroDataSource)
 file.remove(iroDataSource)
 
+file.remove("data/airExample.xdf")
+file.remove("data/ADS2.xdf")
+
 #Further steps
 #/opt/microsoft/mlserver/9.3.0/libraries/RServer/RevoScaleR/demoScripts/RevoScaleR_Getting_Started.R
 #/opt/microsoft/mlserver/9.3.0/libraries/RServer/RevoScaleR/demoScripts/AirOnTime2012Analysis.R

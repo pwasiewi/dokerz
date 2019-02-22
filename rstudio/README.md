@@ -32,11 +32,17 @@ docker load < ~/docker42n4.tar
 ### Install 7zip. Unpack all data in a directory data with 8x from a directory bin. 
 #### execute in a directory data: 
 
-cd data; sh AirOnTime87to12.xdf.sh 
+cd data; 
+
+sh AirOnTime87to12.xdf.sh 
 
 ../bin/8x census-income.tar.7z
 
 ../bin/8x covandcommunities.tar.7z
+
+../bin/8x retailchurn.tar.7z
+
+cd ..
 
 ## Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
 
@@ -78,6 +84,6 @@ docker rm -f rstudio
 ### or just use
 bin/docker_remove
 
-### after building a docker clean your hd
+### After building a docker clean your hd from unwanted temporary image layers
 bin/docker_clean
 
