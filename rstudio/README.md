@@ -64,17 +64,20 @@ dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
 ##### https://coderwall.com/p/2rpbba/docker-create-a-bridge-and-shared-network
 
 ### Run bash in the docker
-
 docker run -it 42n4/rstudio /bin/bash
 
 ### Run bash in the active docker
-
 docker exec -it rstudio /bin/bash
 
 ### Get or update the docker
-
 docker pull 42n4/rstudio
 
 ### Stop and remove the running docker
-
 docker rm -f rstudio
+
+### or just use
+bin/docker_remove
+
+### after building a docker clean your hd
+bin/docker_clean
+
