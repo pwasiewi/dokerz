@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Make sure the user data directory is owned by the guest user
+if [ -d /home/guest/.eclipse ]; then
+  sudo chown guest:users /home/guest/.eclipse
+fi
+exec /opt/eclipse/eclipse

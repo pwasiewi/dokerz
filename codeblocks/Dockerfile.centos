@@ -1,0 +1,30 @@
+# docker-version 17.06.0-dev
+from        centos
+maintainer  Piotr Wasiewicz "42n4na@gmail.com"
+# http://freeciv.wikia.com/wiki/Building_Freeciv_from_source
+
+run yum install -y epel-release deltarpm && yum update -y && yum upgrade -y && yum install -y wget
+# for polish translations (change to your own language)
+run localedef -c -i pl_PL -f UTF-8 pl_PL.UTF-8
+env LANG pl_PL.UTF-8
+env LC_ALL pl_PL.UTF-8
+run wget https://copr.fedorainfracloud.org/coprs/jenslody/codeblocks-release/repo/epel-7/jenslody-codeblocks-release-epel-7.repo -O /etc/yum.repos.d/codeblocks && rpm --import https://copr-be.cloud.fedoraproject.org/results/jenslody/codeblocks-release/pubkey.gpg && yum update -y && yum install -y codeblocks
+run yum install -y gcc bzip2 make
+
+run yum clean all 
+
+# create a user
+run export uid=1001 gid=100 && \
+    useradd -u $uid -m -g users -G audio guest && \
+    mkdir -p /etc/sudoers.d && \
+    echo "guest ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/guest && \
+    chmod 0440 /etc/sudoers.d/guest && \
+    chown ${uid}:${gid} -R /home/guest
+user guest
+env HOME /home/guest
+#volume ["/home/guest"]
+
+# run the client
+copy    ./docker-entrypoint.sh /
+entrypoint ["/docker-entrypoint.sh"]
+cmd [":0"]

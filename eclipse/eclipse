@@ -1,0 +1,9 @@
+#!/bin/bash
+
+[ ! -d .eclipse-docker ] && mkdir -p .eclipse-docker
+docker run -ti --rm \
+           -e DISPLAY=$DISPLAY \
+           -v /tmp/.X11-unix:/tmp/.X11-unix \
+           -v "`pwd`"/.eclipse-docker:/home/guest \
+           -v "`pwd`":/workspace \
+           42n4/eclipse
