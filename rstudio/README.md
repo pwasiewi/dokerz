@@ -1,18 +1,18 @@
 ## M$ RevoScaleR Rstudio Docker with libraries and scripts of Cichosz book: https://www.amazon.com/Data-Mining-Algorithms-Explained-Using/dp/111833258X and my lectures of data mining
-## Based on (https://github.com/rocker-org/rocker/wiki/Using-the-RStudio-image)
+#### Based on (https://github.com/rocker-org/rocker/wiki/Using-the-RStudio-image)
 ### For building one a repository with a Dockerfile in it (you can add your packages to it)
 
-docker pull 42n4/rstudio   #pull my docker (about 7G in tar and 17G uncompressed)
+docker pull 42n4/rstudio   #pull my docker (about 7G in tar)
 git clone https://github.com/pwasiewi/dokerz.git
 
-## or make it in three steps (about 1 hour on i7):
-### 1
+### or make it in three steps (about 1 hour on i7):
+#### 1
 cd dokerz/r-ml
 docker build --rm -t 42n4/r-ml .
-### 2
+#### 2
 cd ../rstudio-ml
 docker build --rm -t 42n4/rstudio-ml .
-### 3
+#### 3
 cd ../rstudio
 docker build --rm -t 42n4/rstudio .
 
@@ -23,10 +23,12 @@ docker push 42n4/rstudio 	#send to docker-hub-user/docker-name
 docker save 42n4/rstudio > ~/docker42n4.tar 
 docker load < ~/docker42n4.tar
 
-## Install 7zip. Unpack all data in a directory data with 8x from a directory bin. 
-### execute in a directory data: cd data; sh AirOnTime87to12.xdf.sh 
-### ../bin/8x census-income.tar.7z
-### ../bin/8x covandcommunities.tar.7z
+### Install 7zip. Unpack all data in a directory data with 8x from a directory bin. 
+#### execute in a directory data: 
+
+cd data; sh AirOnTime87to12.xdf.sh 
+../bin/8x census-income.tar.7z
+../bin/8x covandcommunities.tar.7z
 
 ### Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
 
@@ -53,14 +55,18 @@ dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
 ##### https://forums.docker.com/t/volume-mounts-in-windows-does-not-work/10693/141
 ##### https://coderwall.com/p/2rpbba/docker-create-a-bridge-and-shared-network
 
+### Run bash in the docker
+
+docker run -it 42n4/rstudio /bin/bash
+
 ### Run bash in the active docker
 
 docker exec -it rstudio /bin/bash
 
-### Update the docker
+### Get or update the docker
 
 docker pull 42n4/rstudio
 
-### Stop the running docker
+### Stop and remove the running docker
 
-docker rm rstudio -f
+docker rm -f rstudio
