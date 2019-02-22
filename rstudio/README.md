@@ -38,7 +38,7 @@ cd data; sh AirOnTime87to12.xdf.sh
 
 ../bin/8x covandcommunities.tar.7z
 
-### Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
+## Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
 
 docker run -d -p 8787:8787 --name=rstudio -e USER=guest -e USERID=$(id -u) -e GROUPID=$(id -g) -v $(pwd):/home/guest 42n4/rstudio
 
