@@ -3,31 +3,39 @@
 ### For building one a repository with a Dockerfile in it (you can add your packages to it)
 
 docker pull 42n4/rstudio   #pull my docker (about 7G in tar)
+
 git clone https://github.com/pwasiewi/dokerz.git
 
 ### or make it in three steps (about 1 hour on i7):
 #### 1
 cd dokerz/r-ml
+
 docker build --rm -t 42n4/r-ml .
 #### 2
 cd ../rstudio-ml
+
 docker build --rm -t 42n4/rstudio-ml .
 #### 3
 cd ../rstudio
+
 docker build --rm -t 42n4/rstudio .
 
 docker login 				#docker-hub-user-login and pass to hub.docker.com
+
 docker push 42n4/rstudio 	#send to docker-hub-user/docker-name
 
 ### docker offline copy
 docker save 42n4/rstudio > ~/docker42n4.tar 
+
 docker load < ~/docker42n4.tar
 
 ### Install 7zip. Unpack all data in a directory data with 8x from a directory bin. 
 #### execute in a directory data: 
 
 cd data; sh AirOnTime87to12.xdf.sh 
+
 ../bin/8x census-income.tar.7z
+
 ../bin/8x covandcommunities.tar.7z
 
 ### Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
