@@ -51,7 +51,7 @@ cd ..
 docker run -d -p 8787:8787 --name=rstudio -e USER=guest -e USERID=$(id -u) -e GROUPID=$(id -g) -v $(pwd):/home/guest 42n4/rstudio
 
 ### Start the docker in MSWindows (Docker for Windows) with Linux containers enabled and Powershell and shared disk c: in docker settings (login: rstudio pass: rstudio)
-https://github.com/pwasiewi/dokerz/blob/master/rstudio/linux_docker_in_windows10.png
+![Screen](https://github.com/pwasiewi/dokerz/raw/master/rstudio/linux_docker_in_windows10.png)
 
 docker run -d -p 8787:8787 --name=rstudio --restart=always -v c:/Users/Piotr/remote:/home/rstudio 42n4/rstudio
 
