@@ -2,6 +2,10 @@ docker-freeciv-client
 =====================
 Docker image for a freeciv client.
 
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/42n4/freeciv-client.svg)](https://hub.docker.com/r/42n4/freeciv-client/)
+[![Docker Stars](https://img.shields.io/docker/stars/42n4/freeciv-client.svg)](https://hub.docker.com/r/42n4/freeciv-client/)
+
 Installation
 ============
 To build from source, run the following from the root of this repo (change to your locale in Dockerfile):
