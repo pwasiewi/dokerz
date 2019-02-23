@@ -1,6 +1,11 @@
 ## M$ RevoScaleR Rstudio Docker with libraries and scripts of Cichosz book: https://www.amazon.com/Data-Mining-Algorithms-Explained-Using/dp/111833258X and my lectures of data mining
+=========================
+
 #### Based on (https://github.com/rocker-org/rocker/wiki/Using-the-RStudio-image)
 ### You can pull my docker with all R packages (about 1h with a good internet connection)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/42n4/rstudio.svg)](https://hub.docker.com/r/42n4/rstudio/)
+[![Docker Stars](https://img.shields.io/docker/stars/42n4/rstudio.svg)](https://hub.docker.com/r/42n4/rstudio/)
 
 docker pull 42n4/rstudio   #pull my docker (about 7G in tar)
 
