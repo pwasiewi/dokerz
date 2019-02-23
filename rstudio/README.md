@@ -28,7 +28,7 @@ docker login 				#docker-hub-user-login and pass to hub.docker.com
 
 docker push 42n4/rstudio 	#send to docker-hub-user/docker-name
 
-### docker offline copy
+### Docker offline copy
 docker save 42n4/rstudio > ~/docker42n4.tar 
 
 docker load < ~/docker42n4.tar
