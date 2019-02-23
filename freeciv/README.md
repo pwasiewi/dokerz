@@ -3,6 +3,9 @@ docker-freeciv
 
 [Docker](http://docker.io) image for a private [freeciv](http://freeciv.org) 2.5.6-2ubuntu1 server.
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/42n4/freeciv.svg)](https://hub.docker.com/r/42n4/freeciv/)
+[![Docker Stars](https://img.shields.io/docker/stars/42n4/freeciv.svg)](https://hub.docker.com/r/42n4/freeciv/)
+
 Installation
 ============
 
