@@ -13,6 +13,7 @@ docker pull 42n4/r-ml   #pull my docker (about 7G in tar)
 
 ### or make it - you can add your packages to Dockerfile:
 git clone https://github.com/pwasiewi/dokerz.git
+
 cd dokerz/r-ml
 
 docker build --rm -t 42n4/r-ml .
