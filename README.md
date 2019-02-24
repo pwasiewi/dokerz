@@ -12,4 +12,4 @@ My dockers inspired by other ones
 1. rstudio    - M$ RevoScaleR RServer with Rstudio Server Docker with packages from my lectures and the Cichosz's book
 1. freeciv, freeciv-client - a server and client for freeciv game
 
-1. The rest untested and old - just tests
+1. The rest deprecated and old - just tests
