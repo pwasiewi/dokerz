@@ -4,7 +4,7 @@ FROM 42n4/r-ml:latest
 
 ARG RSTUDIO_VERSION
 ARG PANDOC_TEMPLATES_VERSION 
-ENV PANDOC_TEMPLATES_VERSION ${PANDOC_TEMPLATES_VERSION:-2.1.1}
+ENV PANDOC_TEMPLATES_VERSION ${PANDOC_TEMPLATES_VERSION:-2.6}
 
 ## Add RStudio binaries to PATH
 ENV PATH /usr/lib/rstudio-server/bin:$PATH
@@ -13,10 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends git libcurl4-op
      
 RUN RSTUDIO_LATEST=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/rstudio-server/current.ver) \
   && [ -z "$RSTUDIO_VERSION" ] && RSTUDIO_VERSION=$RSTUDIO_LATEST || true \
-  && wget -q http://download2.rstudio.org/rstudio-server-${RSTUDIO_VERSION}-amd64.deb \
-  && dpkg -i rstudio-server-${RSTUDIO_VERSION}-amd64.deb \
-  #&& wget -q https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.1280-amd64.deb \
-  #&& dpkg -i rstudio-server-1.2.1280-amd64.deb \
+  #&& wget -q http://download2.rstudio.org/rstudio-server-${RSTUDIO_VERSION}-amd64.deb \
+  #&& dpkg -i rstudio-server-${RSTUDIO_VERSION}-amd64.deb \
+  && wget -q https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.1293-amd64.deb \
+  && dpkg -i rstudio-server-1.2.1293-amd64.deb \
   && rm rstudio-*-amd64.deb \
   ## Symlink pandoc & standard pandoc templates for use system-wide
   && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
@@ -43,7 +43,7 @@ RUN RSTUDIO_LATEST=$(wget --no-check-certificate -qO- https://s3.amazonaws.com/r
   && git config --system credential.helper 'cache --timeout=3600' \
   && git config --system push.default simple \
   ## Set up S6 init system
-  && wget -P /tmp/ https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz \
+  && wget -P /tmp/ https://github.com/just-containers/s6-overlay/releases/download/v1.22.0.0/s6-overlay-amd64.tar.gz \
   && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
   && mkdir -p /etc/services.d/rstudio \
   && echo '#!/bin/bash ' > /etc/services.d/rstudio/run \
