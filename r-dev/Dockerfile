@@ -1,16 +1,20 @@
 FROM debian:sid
 
+## (Based on https://github.com/rocker-org/rocker/blob/master/r-base/Dockerfile)
+
 ARG R_VERSION
 ARG BUILD_DATE
 ENV BUILD_DATE ${BUILD_DATE:-}
-ENV R_VERSION ${R_VERSION:-3.4.3}
+ENV R_VERSION ${R_VERSION:-3.5.2}
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV TERM xterm
 
 ## dependencies
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get dist-upgrade -y
+RUN apt-get install -y --no-install-recommends \
+    mc \
+    vim \
     bash-completion \
     ca-certificates \
     file \
@@ -18,22 +22,18 @@ RUN apt-get update \
     g++ \
     gfortran \
     gsfonts \
-    libbz2-1.0 \
-    libcurl3 \
-    libicu57 \
+    libcurl4 \
+    libicu63 \
     libjpeg62-turbo \
     libopenblas-dev \
     libpangocairo-1.0-0 \
-    libpcre3 \
     libpng16-16 \
     libtiff5 \
-    liblzma5 \
     locales \
     make \
     unzip \
-    zip \
-    zlib1g \
-  && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+    zip 
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.utf8 \
   && /usr/sbin/update-locale LANG=en_US.UTF-8 \
   && BUILDDEPS="curl \
@@ -52,8 +52,8 @@ RUN apt-get update \
     libx11-dev \
     libxt-dev \
     perl \
-    tcl8.5-dev \
-    tk8.5-dev \
+    tcl8.6-dev \
+    tk8.6-dev \
     texinfo \
     texlive-extra-utils \
     texlive-fonts-recommended \
@@ -64,8 +64,8 @@ RUN apt-get update \
     xfonts-base \
     xvfb \
     zlib1g-dev" \
-  && apt-get install -y --no-install-recommends $BUILDDEPS \
-  && cd tmp/ \
+  && apt-get install -y --no-install-recommends $BUILDDEPS 
+RUN cd tmp/ \
   ## Download source code
   && curl -O https://cran.r-project.org/src/base/R-3/R-${R_VERSION}.tar.gz \
   ## Extract source code

@@ -9,9 +9,10 @@ if [ "$ADD" == "shiny" ]; then
   apt-get update && apt-get -y install \
     gdebi-core \
     libxt-dev && \
-    wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
+    wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-14.04/x86_64/VERSION -O "version.txt" && \
     VERSION=$(cat version.txt)  && \
     wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
+    #ubuntu-14.04/x86_64/shiny-server-1.5.9.923-amd64.deb
     gdebi -n ss-latest.deb && \
     rm -f version.txt ss-latest.deb && \
     install2.r -e shiny rmarkdown && \
