@@ -1,49 +1,67 @@
-#after pulling new docker 42n4/rstudio run this command
-#.rs.restartR()
+################################################################################
+# Piotr Wasiewicz casestudy based on magic dataset
+################################################################################
+# after pulling new docker 42n4/rstudio run this command
+# .rs.restartR()
 start.time <- Sys.time()
-#For students with some doubts about the suggested caret solution, 
-#I prepared the exemplary case study only with a use of caret - a wrapper of many classifiers and not only:
-#https://github.com/pwasiewi/earin/blob/master/scripts/dm_casestudy04.R
-#https://github.com/pwasiewi/dokerz/blob/master/rstudio/dm_casestudy04.R
-#Try to modify some parameters e.g. in a train function:tuneLength,metric,preProc and so on.
-#For your data try also other classifiers from site:
-#http://topepo.github.io/caret/train-models-by-tag.html
-#Their parameters mentioned in their descriptions are automatically estimated 
-#(in default grid tunes) e.g. with the repeated kfold crossvalidation in the exemplary script.
-#rpart works with weights or priors for unbalanced classes
-#http://machinelearningmastery.com/tactics-to-combat-imbalanced-classes-in-your-machine-learning-dataset/
-#try different values of weights or priors and minsplit and cp, 
-#try to shift working point with cutclass to get better results
-#try other classifiers with priors or weights for class classes
-#at the end compare all roc curves of all used classifiers
-#some other measures are mentioned here:
-#https://geekoverdose.wordpress.com/2014/07/25/svm-classification-example-with-performance-measures-using-r-caret/
+# For students with some doubts about the suggested caret solution, 
+# I prepared the exemplary case study only with a use of caret - a wrapper of many classifiers and not only:
+# https://github.com/pwasiewi/earin/blob/master/scripts/dm_casestudy04.R
+# https://github.com/pwasiewi/dokerz/blob/master/rstudio/dm_casestudy04.R
+# Try to modify some parameters e.g. in a train function:tuneLength,metric,preProc and so on.
+# For your data try also other classifiers from site:
+# http://topepo.github.io/caret/train-models-by-tag.html
+# Their parameters mentioned in their descriptions are automatically estimated 
+# (in default grid tunes) e.g. with the repeated kfold crossvalidation in the exemplary script.
+# rpart works with weights or priors for unbalanced classes
+# http://machinelearningmastery.com/tactics-to-combat-imbalanced-classes-in-your-machine-learning-dataset/
+# try different values of weights or priors and minsplit and cp, 
+# try to shift working point with cutclass to get better results
+# try other classifiers with priors or weights for class classes
+# at the end compare all roc curves of all used classifiers
+# some other measures are mentioned here:
+# https://geekoverdose.wordpress.com/2014/07/25/svm-classification-example-with-performance-measures-using-r-caret/
 #
-#http://www.wekaleamstudios.co.uk/supplementary-material/
-#http://www.r-tutor.com/taxonomy/term/286 #GPU SVM
+# http://www.wekaleamstudios.co.uk/supplementary-material/
+# http://www.r-tutor.com/taxonomy/term/286 #GPU SVM
 
+# Install all packages from Cichosz book "Data mining: explained in R" 
 dmrpkglist<-c('dmr.data','dmr.util','dmr.claseval','dmr.stats','dmr.trans','dmr.linreg','dmr.regeval','dmr.dissim',
               'dmr.dectree','dmr.linclas','dmr.disc','dmr.kcenters','dmr.cluseval','dmr.regtree','dmr.attrsel',
               'dmr.ensemble','dmr.kernel','dmr.bayes','dmr.hierclus','dmr.miscost','dmr.rpartutil')
-#install_github(paste("42n4/", dmrpkglist, sep=""),force = TRUE)
-library(dmr.claseval) #dmr from the Cichosz book "Data mining: explained in R" 
-library(dmr.util)
-library(dmr.trans)    
-library(rpart)
-library(rpart.plot)
-library(randomForest)
-library(caret)
-library(corrplot)			# plot correlations
-library(doParallel)		# parallel processing
-library(dplyr)        # Used by caret
-library(gbm)				  # GBM Models
-library(pROC)				  # plot the ROC curve
-library(xgboost) 
-library(doParallel)
-library(gbm)
-library(party)
-library(partykit)
-library(doParallel)
+pkgcheck <- dmrpkglist %in% row.names(installed.packages())
+dmrpkglist[!pkgcheck]
+for(i in dmrpkglist[!pkgcheck]){install_github(paste("42n4/", i, sep=""),force = TRUE)}
+dmrpkglist<-c("dmr.util",
+              "dmr.trans",
+              "dmr.claseval")
+for(i in dmrpkglist) library(i, character.only = TRUE);
+
+# First check to see if these packages are installed on this machine
+pkglist<-c("rpart",
+           "rpart.plot",
+           "randomForest",
+           "caret",
+           "corrplot",			
+           "doParallel",	
+           "dplyr",       
+           "gbm",				 
+           "pROC",				 
+           "xgboost", 
+           "doParallel",
+           "gbm",
+           "party",
+           "partykit",
+           "doParallel")
+pkgcheck <- pkglist %in% row.names(installed.packages())
+pkglist[!pkgcheck]
+#COMMMENT the line below if you installed packages earlier e.g on root
+for(i in pkglist[!pkgcheck]){install.packages(i,depend=TRUE)}
+#this command is for root instalation of missing packages:
+if(length(pkglist[!pkgcheck])) cat("install.packages(c(");j=0; for(i in pkglist[!pkgcheck]) { j<-j+1 ;  if(j == length(pkglist[!pkgcheck])) cat(paste('"',i,'"',sep="")) else cat(paste('"',i,'",',sep=""));} ; cat("),depend=TRUE)")
+#loading all libraries - necessary to avoid errors of execution
+for(i in pkglist) library(i, character.only = TRUE);
+
 
 ##########################################################################################################
 #My functions
