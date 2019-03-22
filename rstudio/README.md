@@ -50,6 +50,11 @@ cd ..
 
 docker run -d -p 8787:8787 --name=rstudio -e USER=guest -e USERID=$(id -u) -e GROUPID=$(id -g) -v $(pwd):/home/guest 42n4/rstudio
 
+#### If you want the opencl support for AMD, you need to install amd drivers and add '-v /sys/dev:/sys/dev --device=/dev/dri  --device=/dev/kfd' to the docker command:
+docker run -d -p 8787:8787 -v /sys/dev:/sys/dev --device=/dev/dri  --device=/dev/kfd -e USERID=$(id -u) -e GROUPID=$(id -g) -e USER=guest -v $(pwd):/home/guest --name=rstudio 42n4/rstudio
+
+#### If you want the opencl support for NVIDIA, you need to install nvidia-docker2 package from the NVidia PPA (https://github.com/NVIDIA/nvidia-docker) and add '--runtime=nvidia' to the docker command.
+
 ### Start the docker in MSWindows (Docker for Windows) with Linux containers enabled and Powershell and shared disk c: in docker settings (login: rstudio pass: rstudio)
 ![Screen](https://github.com/pwasiewi/dokerz/raw/master/rstudio/linux_docker_in_windows10.png)
 

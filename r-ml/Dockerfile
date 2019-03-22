@@ -1,4 +1,6 @@
-FROM ubuntu:16.04
+FROM 42n4/opencl
+#FROM 42n4/opencl:16.04
+#FROM ubuntu:16.04
 
 ## (Based on https://github.com/rocker-org/rocker/blob/master/r-base/Dockerfile)
 
@@ -16,9 +18,6 @@ RUN useradd rstudio \
 
 #https://blogs.msdn.microsoft.com/mlserver/2018/07/26/dockerizing-r-and-python-web-services/
 RUN apt-get -y update \
-    && apt-get install -y apt-utils \
-    && apt-get install -y apt-transport-https lsb-release software-properties-common gnupg dirmngr ca-certificates file bash-completion wget vim mc \
-    && apt-get dist-upgrade -y \
     && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ xenial main" | tee /etc/apt/sources.list.d/azure-cli.list \
     && wget https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O /tmp/prod.deb \
     && dpkg -i /tmp/prod.deb \

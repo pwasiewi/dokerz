@@ -2,14 +2,27 @@ rxPrivacyControl(FALSE)
 options(encoding = "UTF-8"); par(ask=F)
 rm(list = ls(all = TRUE))
 
-library(rpart) # Popular decision tree algorithm
-#library(rattle) # Fancy tree plot
-library(rpart.plot) # Enhanced tree plots
-library(RColorBrewer) # Color selection for fancy tree plot
-library(party) # Alternative decision tree algorithm
-library(partykit) # Convert rpart object to BinaryTree
-library(caret) # Just a data source for this script
 
+#library(rattle) # Fancy tree plot
+
+# First check to see if these packages are installed on this machine
+pkglist<-c("rpart","rpart.plot","RColorBrewer","party","partykit","caret")
+pkgcheck <- pkglist %in% row.names(installed.packages())
+pkglist[!pkgcheck]
+#COMMMENT the line below if you installed packages earlier e.g on root
+for(i in pkglist[!pkgcheck]){install.packages(i,depend=TRUE)}
+#this command is for root instalation of missing packages:
+if(length(pkglist[!pkgcheck])) cat("install.packages(c(");j=0; for(i in pkglist[!pkgcheck]) { j<-j+1 ;  if(j == length(pkglist[!pkgcheck])) cat(paste('"',i,'"',sep="")) else cat(paste('"',i,'",',sep=""));} ; cat("),depend=TRUE)")
+#loading all libraries - necessary to avoid errors of execution
+for(i in pkglist) library(i, character.only = TRUE);
+
+
+if (!suppressPackageStartupMessages(require("MicrosoftML",
+                                            quietly = TRUE,
+                                            warn.conflicts = FALSE))) {
+  stop("The MicrosoftML package does not seem to be installed, so this\n",
+       "script cannot be run. \n")
+}
 
 Revo.version
 Revo.home()

@@ -3,6 +3,12 @@
 rxPrivacyControl(FALSE)
 options(encoding = "UTF-8"); par(ask=F)
 
+if (!suppressPackageStartupMessages(require("MicrosoftML",
+                                            quietly = TRUE,
+                                            warn.conflicts = FALSE))) {
+  stop("The MicrosoftML package does not seem to be installed, so this\n",
+       "script cannot be run. \n")
+}
 
 testObs <- rnorm(nrow(iris)) > 0
 testIris <- iris[testObs,]

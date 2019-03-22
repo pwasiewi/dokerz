@@ -6,14 +6,16 @@ options(encoding = "UTF-8"); par(ask=F)
 # dplyr: Select specific columns from the dataframe
 
 # First check to see if these packages are installed on this machine
-if('mlbench' %in% rownames(installed.packages()) == FALSE) {install.packages('mlbench', repos='https://cran.r-project.org')}
-if('caret' %in% rownames(installed.packages()) == FALSE) {install.packages('caret', repos='https://cran.r-project.org')}
-if('dplyr' %in% rownames(installed.packages()) == FALSE) {install.packages('dplyr', repos='https://cran.r-project.org')}
+pkglist<-c("mlbench","caret","dplyr")
+pkgcheck <- pkglist %in% row.names(installed.packages())
+pkglist[!pkgcheck]
+#COMMMENT the line below if you installed packages earlier e.g on root
+for(i in pkglist[!pkgcheck]){install.packages(i,depend=TRUE)}
+#this command is for root instalation of missing packages:
+if(length(pkglist[!pkgcheck])) cat("install.packages(c(");j=0; for(i in pkglist[!pkgcheck]) { j<-j+1 ;  if(j == length(pkglist[!pkgcheck])) cat(paste('"',i,'"',sep="")) else cat(paste('"',i,'",',sep=""));} ; cat("),depend=TRUE)")
+#loading all libraries - necessary to avoid errors of execution
+for(i in pkglist) library(i, character.only = TRUE);
 
-# Load the libraries
-library(mlbench)
-library(caret)
-library(dplyr)
 # Load the MicrosoftML library
 library(MicrosoftML)
 # Load the breast cancer dataset in the mlbench library
