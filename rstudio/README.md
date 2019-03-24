@@ -1,4 +1,4 @@
-## M$ RevoScaleR Rstudio Docker with libraries and scripts of Cichosz book: https://www.amazon.com/Data-Mining-Algorithms-Explained-Using/dp/111833258X and my lectures of data mining
+## M$ RevoScaleR Rstudio Docker with libraries and scripts of Cichosz book: https://www.amazon.com/Data-Mining-Algorithms-Explained-Using/dp/111833258X and [my lectures of data mining](https://github.com/pwasiewi/earin)
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/42n4/rstudio.svg)](https://hub.docker.com/r/42n4/rstudio/)
 [![Docker Stars](https://img.shields.io/docker/stars/42n4/rstudio.svg)](https://hub.docker.com/r/42n4/rstudio/)
