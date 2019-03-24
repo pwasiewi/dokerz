@@ -95,6 +95,6 @@ bin/docker_remove
 bin/docker_clean
 
 ## ALTERNATIVES
-docker run -it --rm -p 8888:8888 -p 4040:4040 -e NB_USER=`whoami` -e NB_UID=`id -u` -e NB_GID=`id -g` -v /home/guest/R:/home/jovyan/workspace jupyter/all-spark-notebook
+docker run -it --rm -p 8888:8888 -p 4040:4040 -e NB_USER=$(whoami) -e NB_UID=$(id -u) -e NB_GID=$(id -g) -v /home/guest/R:/home/jovyan/workspace jupyter/all-spark-notebook
 
-docker run -it --rm -p 8888:8888 -p 4040:4040 -e JUPYTER_ENABLE_LAB=yes -e NB_USER=`whoami` -e NB_UID=`id -u` -e NB_GID=`id -g`  -v ~:/home/jovyan/work jupyter/all-spark-notebook
+docker run -it --rm -p 8888:8888 -p 4040:4040 -e JUPYTER_ENABLE_LAB=yes -e NB_USER=$(whoami) -e NB_UID=$(id -u) -e NB_GID=$(id -g)  -v ~:/home/jovyan/work jupyter/all-spark-notebook
