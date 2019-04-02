@@ -12,27 +12,34 @@ if(length(pkglist[!pkgcheck])) cat("install.packages(c(");j=0; for(i in pkglist[
 
 #loading all libraries - necessary to avoid errors of execution
 #for(i in pkglist) library(i, character.only = TRUE);
-
+ 
 
 rxPrivacyControl(FALSE)
-rxOptions(xdfCompressionLevel = 9)
 options(encoding = "UTF-8"); par(ask=F)
 
 # http://www.andresmh.com/nyctaxitrips/
+# https://github.com/chendaniely/pandas_for_everyone/blob/master/data/raw_data_urls.txt
+# files created by this script
+# january-june 2016
+# http://www.mediafire.com/file/pm88hgqul64p9me/yellow_tripdata_2016.xdf/file
+# 
+# https://data.cityofnewyork.us/Transportation/2017-Green-Taxi-Trip-Data/5gj9-2kzx
 # https://github.com/Azure/LearnAnalytics-AnalyzingBigDataWithMRS/tree/master/instructor_resources
 # Load the MicrosoftML library
 library(MicrosoftML)
-#rxCompressXdf(mysource, xdfCompressionLevel = 9, outFile=myfile)
+
 
 # in transform func you set labels: as.factor(dataList$x, levels = c(1, 2,3), 
 #                            labels = c("One", "Two", "Three")) 
 
-
 data_dir <- "data"
+output_xdf <- file.path(data_dir, 'yellow_tripdata_2016.xdf')
+my_xdf <- file.path(data_dir, 'yellow_tripdata_2016_smaller.xdf')
 library(lubridate)
-most_recent_date <- ymd("2016-07-01") # the day of the months is irrelevant
+begin_data <- ymd("2015-12-01") # the day of the months is irrelevant
 
 col_classes <- c(
+  'vendor_id'             = "integer",
   'pickup_datetime'       = "character",
   'dropoff_datetime'      = "character",
   'passenger_count'       = "integer",
@@ -40,6 +47,7 @@ col_classes <- c(
   'pickup_longitude'      = "numeric",
   'pickup_latitude'       = "numeric",
   'rate_code_id'          = "factor",
+  'store_and_fwd_flag'    = "character",
   'dropoff_longitude'     = "numeric",
   'dropoff_latitude'      = "numeric",
   'payment_type'          = "factor",
@@ -51,32 +59,55 @@ col_classes <- c(
   'improvement_surcharge' = "numeric",
   'total_amount'          = "numeric")
 
+
+col_names <- c(
+  'vendor_id'            ,
+  'pickup_datetime'      ,
+  'dropoff_datetime'     ,
+  'passenger_count'      ,
+  'trip_distance'        ,
+  'pickup_longitude'     ,
+  'pickup_latitude'      ,
+  'rate_code_id'         ,
+  'store_and_fwd_flag'   ,
+  'dropoff_longitude'    ,
+  'dropoff_latitude'     ,
+  'payment_type'         ,
+  'fare_amount'          ,
+  'extra'                ,
+  'mta_tax'              ,
+  'tip_amount'           ,
+  'tolls_amount'         ,
+  'improvement_surcharge',
+  'total_amount'        )
+
+rxOptions(xdfCompressionLevel = 3)
 # because we keep appending to the same file, we can't run this in parallel
 st <- Sys.time()
 ii=1
 for(ii in 1:6) { # get each month's data and append it to the first month's data
-  file_date <- most_recent_date - months(ii)
+  file_date <- begin_data + months(ii)
   input_csv <- sprintf('yellow_tripdata_%s.csv', substr(file_date, 1, 7))
   input_csv <- file.path(data_dir, input_csv)
   input_xdf <- sprintf('yellow_tripdata_%s.xdf', substr(file_date, 1, 7))
   input_xdf <- file.path(data_dir, input_xdf)
-  append <- if (ii == 1) "none" else "rows"
   dataout <- rxImport(input_csv, outFile=input_xdf, colClasses = col_classes, overwrite = TRUE)
   rxGetInfo(dataout, getVarInfo=TRUE)
   print(input_csv)
 }
 Sys.time() - st # stores the time it took to import
 
-output_xdf <- file.path(data_dir, 'yellow_tripdata_2016.xdf')
-
+rxOptions(xdfCompressionLevel = 9)
 st <- Sys.time()
-ii=1
+ii=7
 for(ii in 1:6) { # get each month's data and append it to the first month's data
-  file_date <- most_recent_date - months(ii)
+  file_date <- begin_data + months(ii)
   input_xdf <- sprintf('yellow_tripdata_%s.xdf', substr(file_date, 1, 7))
   input_xdf <- file.path(data_dir, input_xdf)
   nyc_xdf <- RxXdfData(input_xdf)
+  names(nyc_xdf) <- col_names
   append <- if (ii == 1) "none" else "rows"
+  #append="rows"
   dataout <- rxImport(nyc_xdf, outFile=output_xdf, 
                       colClasses = col_classes, overwrite = TRUE, append = append)
   rxGetInfo(dataout, getVarInfo=TRUE)
@@ -84,8 +115,11 @@ for(ii in 1:6) { # get each month's data and append it to the first month's data
 }
 Sys.time() - st # stores the time it took to import
 
+#Recompress file to smaller size (highest compression = 9)
+# st <- Sys.time()
+# rxCompressXdf(output_xdf, xdfCompressionLevel = 9, outFile=my_xdf)
+# Sys.time() - st # stores the time it took to import
 
-#http://www.mediafire.com/file/u9coo2s9sxuu94f/yellow_tripdata_2016.xdf/file
 nyc_xdf <- RxXdfData(output_xdf)
 rxGetInfo(nyc_xdf, getVarInfo=TRUE)
 
