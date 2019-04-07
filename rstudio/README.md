@@ -44,13 +44,11 @@ sh wgetyellowdatasample201606.sh
 cd ..
 ```
 ## Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
-```
 docker run -d -p 8787:8787 -e USER=$(whoami) -e USERID=$(id -u) -e GROUPID=$(id -g) -v $(pwd):/home/$(whoami) --name=rstudio 42n4/rstudio
-```
+
 #### If you want the opencl support for AMD, you need to install amd drivers and add '-v /sys/dev:/sys/dev --device=/dev/dri  --device=/dev/kfd' to the docker command:
-```
 docker run -d -p 8787:8787 -v /sys/dev:/sys/dev --device=/dev/dri  --device=/dev/kfd -e USERID=$(id -u) -e GROUPID=$(id -g) -e USER=$(whoami) -v $(pwd):/home/$(whoami) --name=rstudio 42n4/rstudio
-```
+
 #### If you want the opencl support for NVIDIA, you need to install nvidia-docker2 package from the NVidia PPA (https://github.com/NVIDIA/nvidia-docker) and add '--runtime=nvidia' to the docker command.
 
 ## Start the docker in MSWindows (Docker for Windows) with Linux containers enabled and Powershell and shared disk c: in docker settings (login: rstudio pass: rstudio)
