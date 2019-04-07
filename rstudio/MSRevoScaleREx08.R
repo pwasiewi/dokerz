@@ -1,4 +1,4 @@
-# Generated files placed below can be used in these scripts
+# Generated files by MSRevoScaleREx08.R placed below can be used in these scripts
 # https://github.com/Azure/LearnAnalytics-AnalyzingBigDataWithMRS/tree/master/student_resources/scripts
 # http://www.andresmh.com/nyctaxitrips/
 # https://github.com/chendaniely/pandas_for_everyone/blob/master/data/raw_data_urls.txt
