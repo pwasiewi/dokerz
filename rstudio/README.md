@@ -33,19 +33,16 @@ docker load < ~/docker42n4.tar
 
 ### Install 7zip. Unpack all data in a directory data with 8x from a directory bin. 
 #### execute in a directory data: 
-
+```
 cd data; 
-
 sh AirOnTime87to12.xdf.sh 
-
+sh wgetyellowdatasample201606.sh
 ../bin/8x census-income.tar.7z
-
 ../bin/8x covandcommunities.tar.7z
-
 ../bin/8x retailchurn.tar.7z
-
+../bin/8x yellownycmap.tar.7z
 cd ..
-
+```
 ## Start the docker in Linux with exact username and its user id and group id (login: guest pass: rstudio)
 
 docker run -d -p 8787:8787 --name=rstudio -e USER=$(whoami) -e USERID=$(id -u) -e GROUPID=$(id -g) -v $(pwd):/home/$(whoami) 42n4/rstudio
