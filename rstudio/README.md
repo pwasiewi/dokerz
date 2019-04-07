@@ -70,7 +70,7 @@ dism.exe /Online /Disable-Feature:Microsoft-Hyper-V-All
 ```
 dism.exe /Online /Enable-Feature:Microsoft-Hyper-V /All
 ```
-### In order to use VirtualBox with Docker use Docker ToolBox: https://www.docker.com/products/docker-toolbox
+### In order to use VirtualBox with Docker use Docker ToolBox: https://www.docker.com/products/docker-toolbox, but it is deprecated.
 
 ### Docker for Windows always use hyper-v disabling other vm providers
 
