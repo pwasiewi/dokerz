@@ -1,3 +1,15 @@
+# Generated files placed below can be used in these scripts
+# https://github.com/Azure/LearnAnalytics-AnalyzingBigDataWithMRS/tree/master/student_resources/scripts
+# http://www.andresmh.com/nyctaxitrips/
+# https://github.com/chendaniely/pandas_for_everyone/blob/master/data/raw_data_urls.txt
+# files created by this script
+# january-june 2016 - half year sample of above 60mln rows
+# http://www.mediafire.com/file/pm88hgqul64p9me/yellow_tripdata_2016.xdf/file
+# june 2026 - one month sample of 11135470 rows
+# http://www.mediafire.com/file/q12fkyko059uies/yellow_tripdata_2016-06.xdf/file
+# january-december 2015 - the whole year sample
+# http://www.mediafire.com/file/rzle0hm11onl101/yellow_tripdata_2015.xdf/file
+
 pkglist<-c("dplyr", "lubridate", "stringr", "tidyr", "rgeos", 
            "maptools", "ggplot2", "ggrepel", "ggmap", "gridExtra", 
            "evaluate", "formatR", "highr", "markdown", "yaml", 
@@ -16,19 +28,6 @@ for(i in pkglist) library(i, character.only = TRUE);
 
 rxPrivacyControl(FALSE)
 options(encoding = "UTF-8"); par(ask=F)
-
-# http://www.andresmh.com/nyctaxitrips/
-# https://github.com/chendaniely/pandas_for_everyone/blob/master/data/raw_data_urls.txt
-# files created by this script
-# january-june 2016 - half year sample of above 60mln rows
-# http://www.mediafire.com/file/pm88hgqul64p9me/yellow_tripdata_2016.xdf/file
-# june 2026 - one month sample of 11135470 rows
-# http://www.mediafire.com/file/q12fkyko059uies/yellow_tripdata_2016-06.xdf/file
-# january-december 2015 - the whole year sample
-# http://www.mediafire.com/file/rzle0hm11onl101/yellow_tripdata_2015.xdf/file
-
-# these files can be used in these scripts
-# https://github.com/Azure/LearnAnalytics-AnalyzingBigDataWithMRS/tree/master/student_resources/scripts
 
 # Load the MicrosoftML library
 library(MicrosoftML)
